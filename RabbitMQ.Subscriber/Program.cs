@@ -15,17 +15,13 @@ namespace RabbitMQ.Subscriber
 
             var channel = connection.CreateModel();
 
-            var randomQueueName = "log-database-save";//channel.QueueDeclare().QueueName;
-
-            channel.QueueDeclare(randomQueueName, true, false, false);
-
-            channel.QueueBind(randomQueueName, "logs-fanout", "", null);
-
             channel.BasicQos(0, 1, false);//her bir subscriber için 5 er mesaj gönderir(false)---true olursa 6 mesajı tek seferde 3e3 diye gönderir
 
             var consumer=new EventingBasicConsumer(channel);
 
-            channel.BasicConsume(randomQueueName,false ,consumer);
+            var queueName = "direct-queue-Criticial";
+
+            channel.BasicConsume(queueName, false ,consumer);
 
             Console.WriteLine("Loglar dinleniyor...");
 
